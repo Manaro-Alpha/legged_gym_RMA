@@ -140,41 +140,34 @@ class LeggedRobotCfg(BaseConfig):
 
     class rewards:
         class scales:
-            # # termination = -0.0
-            # tracking_lin_vel = 1.5
-            # tracking_ang_vel = 0.5
-            # lin_vel_z = -1.0
-            # ang_vel_xy = -0.05
-            # orientation = -1
-            # torques = -0.00001
-            # # dof_vel = -0.
-            # dof_acc = -2.5e-7
-            # base_height = -1. 
-            # feet_air_time =  0.1
-            # collision = -10.
-            # feet_stumble = -1.0 
-            # action_rate = -0.01
-            # smoothness = -1e-75
-            # hip_pos = -0.5
-            # dof_error = -0.04
-            torques = -0.000001
-            dof_pos_limits = -10.0
-            # feet_step = 0.0
-            feet_stumble = -0.5
-            collision = -2.5
-            stand_still = -0.0
-            # termination = 0.0
-            tracking_lin_vel = 1.0
+            # termination = -0.0
+            tracking_lin_vel = 1.5
             tracking_ang_vel = 0.5
-            # lin_vel_z = -0.0
-            # ang_vel_xy = -0.00
-            orientation = -0.0
-            # dof_vel = -0.0007
+            lin_vel_z = -1.0
+            ang_vel_xy = -0.05
+            orientation = -1
+            torques = -0.00001
+            # dof_vel = -0.
             dof_acc = -2.5e-7
-            base_height = -5. 
+            base_height = -1. 
             feet_air_time =  0.1
-            hip_pos = -0.02
+            collision = -10.
+            feet_stumble = -1.0 
             action_rate = -0.01
+            # stand_still = -0.
+
+            # forward = 200
+            # lateral_movement_rotation = -0.0002
+            # work = -0.002
+            # lin_vel_z = -2.0
+            # ground_impact = -0.002
+            smoothness = -1e-7
+            # action_magnitude = -0.07
+            # joint_speed = -0.002
+            # feet_contact_forces = -0.01
+            # orientation = -0.0015
+            hip_pos = -0.5
+            dof_error = -0.04
 
 
         only_positive_rewards = True # if true negative total rewards are clipped at zero (avoids early termination problems)
