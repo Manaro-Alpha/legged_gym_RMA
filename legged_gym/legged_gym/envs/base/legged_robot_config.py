@@ -32,10 +32,10 @@ from .base_config import BaseConfig
 
 class LeggedRobotCfg(BaseConfig):
     class env:
-        num_envs = 4096
+        num_envs = 1024
         num_observations = 43
-        num_obs_hist = 30
-        num_action_hist = 30
+        num_obs_hist = 50
+        num_action_hist = 50
         num_privileged_obs = 36 # if not None a priviledge_obs_buf will be returned by step() (critic obs for assymetric training). None is returned otherwise 
         num_latent_dim = 8
         num_actions = 12
@@ -64,7 +64,7 @@ class LeggedRobotCfg(BaseConfig):
         num_rows= 10 # number of terrain rows (levels)
         num_cols = 20 # number of terrain cols (types)
         # terrain types: [smooth slope, rough slope, stairs up, stairs down, discrete]
-        terrain_proportions = [0.4, 0.4, 0., 0., 0.2]
+        terrain_proportions = [0.1, 0.5, 0., 0., 0.4]
         # trimesh only:
         slope_treshold = 0.75 # slopes above this threshold will be corrected to vertical surfaces
 
@@ -81,7 +81,7 @@ class LeggedRobotCfg(BaseConfig):
             heading = [0, 0]
 
     class init_state:
-        pos = [0.0, 0.0, 0.34] # x,y,z [m]
+        pos = [0.0, 0.0, 1] # x,y,z [m]
         rot = [0.0, 0.0, 0.0, 1.0] # x,y,z,w [quat]
         lin_vel = [0.0, 0.0, 0.0]  # x,y,z [m/s]
         ang_vel = [0.0, 0.0, 0.0]  # x,y,z [rad/s]
@@ -145,11 +145,11 @@ class LeggedRobotCfg(BaseConfig):
             tracking_ang_vel = 0.5
             lin_vel_z = -1.0
             ang_vel_xy = -0.05
-            orientation = -1
+            orientation = -1.
             torques = -0.00001
             # dof_vel = -0.
             dof_acc = -2.5e-7
-            base_height = -1. 
+            # base_height = -1. 
             feet_air_time =  0.1
             collision = -10.
             feet_stumble = -1.0 
@@ -167,7 +167,7 @@ class LeggedRobotCfg(BaseConfig):
             # feet_contact_forces = -0.01
             # orientation = -0.0015
             hip_pos = -0.5
-            dof_error = -0.04
+            dof_error = -0.05
 
 
         only_positive_rewards = True # if true negative total rewards are clipped at zero (avoids early termination problems)
@@ -245,17 +245,29 @@ class LeggedRobotCfgPPO(BaseConfig):
         entropy_coef = 0.01
         num_learning_epochs = 5
         num_mini_batches = 4 # mini batch size = num_envs*nsteps / nminibatches
-        learning_rate = 2e-4#1.e-3 #5.e-4
-        schedule = 'adaptive' # could be adaptive, fixed
+        learning_rate = 2.e-4#1.e-3 #5.e-4
+        schedule = 'fixed' # could be adaptive, fixed
         gamma = 0.99
         lam = 0.95
         desired_kl = 0.01
         max_grad_norm = 1.
 
+    class algorithm_dagger:
+        num_learning_epochs = 10
+        num_mini_batches = 10 # mini batch size = num_envs*nsteps / nminibatches
+        learning_rate = 1.e-5
+
     class runner:
         policy_class_name = 'ActorCritic_RMA'
-        algorithm_class_name = 'PPO'
-        num_steps_per_env = 24 # per iteration
+        adapt_module_class_name = 'AdaptationModule'
+        teacher = True
+        if teacher:
+            algorithm_class_name = 'PPO'
+            num_steps_per_env = 24
+        else:
+            algorithm_class_name = 'Dagger'
+            num_steps_per_env = 24
+        num_steps_per_env = 5*24 # per iteration
         max_iterations = 15000 # number of policy updates
 
         # logging

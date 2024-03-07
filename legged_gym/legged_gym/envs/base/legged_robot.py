@@ -162,6 +162,8 @@ class LeggedRobot(BaseTask):
         self.action_hist_buf = torch.cat((self.action_hist_buf[:,self.num_actions:],self.last_actions),dim=-1) ## update action history
         self.last_dof_vel[:] = self.dof_vel[:]
         self.last_root_vel[:] = self.root_states[:, 7:13]
+        # print(torch.mean(torch.mean(self.root_states[:, 2].unsqueeze(1) - self.measured_heights, dim=1),dim=-1))
+
 
         if self.viewer and self.enable_viewer_sync and self.debug_viz:
             self._draw_debug_vis()

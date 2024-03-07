@@ -30,4 +30,4 @@
 
 from .actor_critic import ActorCritic
 from .actor_critic_recurrent import ActorCriticRecurrent
-from .actor_critic_RMA import ActorCritic_RMA
+from .actor_critic_RMA import ActorCritic_RMA,AdaptationModule
