@@ -66,6 +66,7 @@ class OnPolicyRunner:
                                                         self.env.num_privileged_obs,
                                                         num_latent_dim,
                                                         adapt_in,
+                                                        self.env.num_obs_hist,
                                                         **self.policy_cfg).to(self.device)
         alg_class = eval(self.cfg["algorithm_class_name"]) # PPO
         self.alg: PPO = alg_class(actor_critic, device=self.device, **self.alg_cfg)

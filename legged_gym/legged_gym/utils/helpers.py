@@ -124,6 +124,30 @@ def get_load_path(root, load_run=-1, checkpoint=-1):
     load_path = os.path.join(load_run, model)
     return load_path
 
+def get_load_path_adapt_mod(root, load_run=-1, checkpoint=-1):
+    try:
+        runs = os.listdir(root)
+        #TODO sort by date to handle change of month
+        runs.sort()
+        if 'exported' in runs: runs.remove('exported')
+        last_run = os.path.join(root, runs[-1])
+    except:
+        raise ValueError("No runs in this directory: " + root)
+    if load_run==-1:
+        load_run = last_run
+    else:
+        load_run = os.path.join(root, load_run)
+
+    if checkpoint==-1:
+        models = [file for file in os.listdir(load_run) if 'model_adapt_mod' in file]
+        models.sort(key=lambda m: '{0:0>15}'.format(m))
+        model = models[-1]
+    else:
+        model = "model_adapt_mod_{}.pt".format(checkpoint) 
+
+    load_path = os.path.join(load_run, model)
+    return load_path
+
 def update_cfg_from_args(env_cfg, cfg_train, args):
     # seed
     if env_cfg is not None:
@@ -188,6 +212,26 @@ def export_policy_as_jit(actor_critic, path):
         model = copy.deepcopy(actor_critic.actor).to('cpu')
         traced_script_module = torch.jit.script(model)
         traced_script_module.save(path)
+
+def export_adapt_mod_as_jit(adapt_mod, path):
+
+    os.makedirs(path, exist_ok=True)
+    path1 = os.path.join(path, 'history_encoder_mlp.pt')
+    model = copy.deepcopy(adapt_mod.history_encoder_mlp).to('cpu')
+    traced_script_module = torch.jit.script(model)
+    traced_script_module.save(path1)
+
+    os.makedirs(path, exist_ok=True)
+    path2 = os.path.join(path, 'history_encoder_conv.pt')
+    model = copy.deepcopy(adapt_mod.history_encoder_conv).to('cpu')
+    traced_script_module = torch.jit.script(model)
+    traced_script_module.save(path2)
+
+    os.makedirs(path, exist_ok=True)
+    path3 = os.path.join(path, 'history_encoder_out.pt')
+    model = copy.deepcopy(adapt_mod.history_encoder_out).to('cpu')
+    traced_script_module = torch.jit.script(model)
+    traced_script_module.save(path3)
 
 
 

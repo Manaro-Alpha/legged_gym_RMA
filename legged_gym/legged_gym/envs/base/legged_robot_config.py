@@ -44,7 +44,7 @@ class LeggedRobotCfg(BaseConfig):
         episode_length_s = 20 # episode length in seconds
 
     class terrain:
-        mesh_type = 'trimesh' # "heightfield" # none, plane, heightfield or trimesh
+        mesh_type = 'plane' # "heightfield" # none, plane, heightfield or trimesh
         horizontal_scale = 0.1 # [m]
         vertical_scale = 0.005 # [m]
         border_size = 25 # [m]
@@ -277,5 +277,6 @@ class LeggedRobotCfgPPO(BaseConfig):
         # load and resume
         resume = False
         load_run = -1 # -1 = last run
+        load_run_adapt_mod = -1
         checkpoint = -1 # -1 = last saved model
         resume_path = None # updated from load_run and chkpt

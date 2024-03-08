@@ -212,7 +212,7 @@ class OnPolicyRunner_Dagger:
             }, path)
 
     
-    def load(self, path, load_optimizer=True):
+    def load(self, path, path_adapt_mod, load_optimizer=True):
         loaded_dict = torch.load(path)
         # print("#################",loaded_dict["model_state_dict"].keys())
         self.alg.actor_critic.load_state_dict(loaded_dict['model_state_dict'])
@@ -220,6 +220,9 @@ class OnPolicyRunner_Dagger:
             params.requires_grad=False
         # if load_optimizer:
         #     self.alg.optimizer.load_state_dict(loaded_dict['optimizer_state_dict'])
+        loaded_dict2 = torch.load(path_adapt_mod)
+        self.alg.adapt_mod.load_state_dict(loaded_dict2['model_state_dict'])
+
         self.current_learning_iteration = loaded_dict['iter']
         return loaded_dict['infos']
 
@@ -233,5 +236,5 @@ class OnPolicyRunner_Dagger:
         self.alg.actor_critic.eval() # switch to evaluation mode (dropout for example)
         if device is not None:
             self.alg.actor_critic.to(device)
-        return self.alg.actor_critic.act_inference_dagger
+        return self.alg.adapt_mod.act_inference_dagger
 
