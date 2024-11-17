@@ -1,4 +1,4 @@
-# DreamWaQ
+# Rapid Motor Adaptation
 
 ## Description
 This repo contains implementation of the paper [RMA: Rapid Motor Adaptation for Legged Robots](https://arxiv.org/abs/2107.04034)
